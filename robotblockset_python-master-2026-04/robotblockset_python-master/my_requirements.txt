@@ -1,0 +1,9 @@
+numpy>=1.24 quaternionic>=1.0.12 matplotlib>=3.7.5 scipy sympy pyyaml coppeliasim-zmqremoteapi-client mujoco mediapy  
+ur_rtde 
+ompl  
+comtypes pypiwin32 pywin32 pythoncom pyusb  
+opencv-contrib-python pyrealsense2 open3d pydantic cython
+
+# Genesis
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+python -m pip install genesis-world

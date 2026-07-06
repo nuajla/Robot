@@ -1,0 +1,219 @@
+<robot name="example_robot">
+   <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+   </material>
+   <material name="Blue">
+        <color rgba="0.0 0.0 0.8 1.0"/>
+   </material>
+   <material name="Green">
+        <color rgba="0.0 0.8 0.0 1.0"/>
+   </material>
+   <material name="Grey">
+        <color rgba="0.6 0.6 0.6 1.0"/>
+   </material>
+   <material name="Orange">
+       <color rgba="1.0 0.4235294117647059 0.0392156862745098 1.0"/>
+   </material>
+   <material name="Brown">
+       <color rgba="0.8705882352941177 0.8117647058823529 0.7647058823529411 1.0"/>
+   </material>
+   <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+   </material>
+   <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+   </material>
+   <material name="Silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+   </material>
+   <link name="world"/>
+   <joint name="UM_joint_world" type="fixed">
+        <parent link="world"/>
+        <child link="UM_link0"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+   </joint>
+   <link name="UM_link0">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <box size="1.0 1.0 0.2"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <box size="1.0 1.0 0.2"/>
+            </geometry>
+        </collision>
+    </link>
+    <link name="UM_link1">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+    </link>
+    <joint name="UM_joint1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <parent link="UM_link0"/>
+        <child link="UM_link1"/>
+    </joint>
+    <link name="UM_link2">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="red">
+                <color rgba="1 0 0 1"/>
+            </material>    
+            <geometry>
+                <cylinder length="1.0" radius="0.10"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <cylinder length="1.0" radius="0.10"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="UM_joint2" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <parent link="UM_link1"/>
+        <child link="UM_link2"/>
+    </joint>
+    <link name="UM_link3">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="yellow">
+                <color rgba="1 1 0 1"/>
+            </material>    
+            <geometry>
+                <cylinder length="2.8" radius="0.10"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <cylinder length="3.6" radius="0.10"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="UM_joint3" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <parent link="UM_link2"/>
+        <child link="UM_link3"/>
+    </joint>
+    
+    <link name="UM_link4">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+    </link>
+    <joint name="UM_joint4" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <parent link="UM_link3"/>
+        <child link="UM_link4"/>
+    </joint>
+    <link name="UM_link5">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.625" rpy="0 0 0"/>
+            <material name="green">
+                <color rgba="0 1 0 1"/>
+            </material>    
+            <geometry>
+                <cylinder length="1.25" radius="0.1"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.625" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <cylinder length="1.25" radius="0.1"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="UM_joint5" type="revolute">
+        <origin xyz="0 0 1.8" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <parent link="UM_link4"/>
+        <child link="UM_link5"/>
+    </joint>
+    <link name="UM_link6">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.5125" rpy="0 0 0"/>
+            <material name="blue">
+                <color rgba="0 0 1 1"/>
+            </material>    
+            <geometry>
+                <cylinder length="1.0125" radius="0.1"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.5125" rpy="0 0 0"/>
+            <material name="LightGrey">
+                <color rgba="0.7 0.7 0.7 1.0"/>
+            </material>
+            <geometry>
+                <cylinder length="1.0125" radius="0.1"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="UM_joint6" type="revolute">
+        <origin xyz="0 0 1.25" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <parent link="UM_link5"/>
+        <child link="UM_link6"/>
+    </joint>
+    <link name="UM_tool">
+        <inertial>
+            <mass value="1"/>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <inertia ixx="0.01" ixy="-0.001" ixz="-0.001" iyy="0.01" iyz="0.001" izz="0.01"/>
+        </inertial>
+    </link>
+    <joint name="UM_tool" type="fixed">
+        <origin xyz="0 0 1.0125" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <parent link="UM_link6"/>
+        <child link="UM_tool"/>
+    </joint>    
+</robot>

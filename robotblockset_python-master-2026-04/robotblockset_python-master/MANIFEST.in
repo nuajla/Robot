@@ -1,0 +1,9 @@
+include README.md
+include LICENSE
+
+recursive-include robotblockset/urdf_models *
+recursive-include robotblockset/tutorials *
+recursive-include robotblockset/examples *
+recursive-include robotblockset/mujoco/mjcf_models *
+recursive-include robotblockset/mujoco/simmujoco *
+recursive-include robotblockset/coppelia/models *

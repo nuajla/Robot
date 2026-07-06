@@ -1,0 +1,9 @@
+*.pkl
+*.pth
+*.ckpt
+venv/
+__pycache__/
+*.pyc
+.env
+Miniconda3-latest-Linux-x86_64.sh
+*.sh
