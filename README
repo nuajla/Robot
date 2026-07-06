@@ -6,4 +6,4 @@ export PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages:$PYTHONPATH
 export PYTHONPATH=/home/ajla/rbs_ws/devel/lib/python3/dist-packages:$PYTHONPATH
 export ROS_MASTER_URI=http://10.20.0.5:11311
 export ROS_IP=10.20.0.5
-python run.py
+python execute_action.py
