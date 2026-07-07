@@ -1,0 +1,82 @@
+# =============================================================================
+# Configuration for the Cloth Pick&Place Data-Collection Web App.
+#
+# EVERY parameter the code uses lives here. Nothing is hard-coded in the
+# Python modules. A copy of this file is saved into each dataset folder when
+# it is first initialised, so every dataset records the exact settings used.
+# =============================================================================
+
+# Global random seed (no randomness is actually used in this app -- every
+# point is human-clicked and the motion is deterministic -- kept for
+# consistency with the sibling anomaly_annotation_app and in case a future
+# component needs it).
+seed: 42
+
+paths:
+  # Where dataset folders are written. A dated sub-folder
+  # (cloth_pickplace_YYYY-MM-DD) is created inside this root.
+  dataset_root: ./datasets
+
+  # Static test image, used only when capture.source = static_file. Lets the
+  # whole UI be exercised on a Windows laptop with no camera/ROS available.
+  static_rgb_path: ../rgb.png
+
+capture:
+  # ros_topic   -> subscribe to capture.image_topic (cv_bridge) and use the
+  #                latest frame, exactly like cloth_pick_place_selector.py.
+  # static_file -> read a fixed image from disk (UI testing, no ROS needed).
+  source: ros_topic
+  image_topic: /rgb/image_raw
+  wait_timeout_s: 10.0     # max seconds to wait for the first ROS frame
+  poll_interval_s: 0.05
+
+robot:
+  # false = SIMULATE: log the intended motion and still record the dataset,
+  # but never call panda_ros / PandaGripper. Lets the whole app (including a
+  # real ROS camera) be exercised without moving the physical arm.
+  enabled: true
+
+  node_name: cloth_pick_place_app
+  namespace: pingvin_1
+  control_strategy: JointImpedance
+  home_on_start: true
+
+  # Pixel (u, v, 1) -> robot (X, Y). Ported unchanged from
+  # cloth_pick_place_selector.py -- do NOT edit without recalibrating, and
+  # only valid for the un-cropped, native-resolution frame from
+  # capture.image_topic (see kalibracija.py for how it was derived).
+  affine_matrix:
+    - [7.16447629e-07, 1.13357811e-03, -3.02383482e-01]
+    - [1.13117136e-03, 6.03340945e-06, -1.05554366e+00]
+
+  # Motion heights (metres) and timings (seconds) -- same values and same
+  # step order as cloth_pick_place_selector.py._execute_cloth_action.
+  z_above: 0.20
+  z_grasp: 0.11
+  z_pull: 0.13
+  gripper_open: 0.02
+  move_time: 3.0
+  grasp_time: 1.0
+  home_time: 4.0
+
+dataset:
+  # If set, this exact folder name is used inside dataset_root. If empty, the
+  # app reuses the most recent existing cloth_pickplace_* folder, or creates
+  # today's.
+  folder_name: ""
+  dated_folder_prefix: cloth_pickplace
+
+server:
+  host: 0.0.0.0
+  port: 5001
+  debug: false
+
+logging:
+  level: INFO
+  log_dir: ./logs
+
+huggingface:
+  # Used only by push_to_hf.py. The token is read from the .env file (HF_TOKEN).
+  push: false
+  repo_id: vhasic/cloth_pickplace_dataset
+  private: true

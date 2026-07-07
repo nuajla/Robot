@@ -7,3 +7,5 @@ __pycache__/
 .env
 Miniconda3-latest-Linux-x86_64.sh
 *.sh
+
+*.ini

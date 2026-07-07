@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Generated datasets and logs
+datasets/
+logs/
+
+# Python
+__pycache__/
+*.pyc

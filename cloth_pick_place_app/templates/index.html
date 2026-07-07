@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloth Pick&amp;Place Data Collection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ version }}">
+</head>
+<body>
+<div id="app">
+
+  <!-- ====================== TOP BAR ====================== -->
+  <header>
+    <div class="header-left">
+      <h1>Cloth Pick&amp;Place Data Collection</h1>
+      <div class="meta">
+        <span>Dataset: <b id="datasetDir">…</b></span>
+        <span>Source: <b id="captureSource">…</b></span>
+        <span>Robot: <b id="robotMode">…</b></span>
+        <span>Episodes saved: <b id="episodeCount">…</b></span>
+        <span>Steps saved: <b id="stepCount">…</b></span>
+      </div>
+    </div>
+  </header>
+
+  <div id="simBanner" class="sim-banner" hidden>
+    &#9888; Simulation mode &mdash; <b>robot.enabled = false</b> in config.yaml. Executing will record
+    the dataset but will NOT move the physical arm.
+  </div>
+
+  <!-- ====================== 2-COLUMN BODY ====================== -->
+  <div class="columns">
+
+    <!-- ============ LEFT: IMAGE + CANVAS TOOLS ============ -->
+    <section class="col-image">
+      <div class="toolbar">
+        <button id="btnCapture" class="primary">&#9654; Capture frame</button>
+        <span class="ep-status" id="epStatus">No active episode. Put the cloth in frame and capture.</span>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="canvas" width="10" height="10"></canvas>
+        <div id="canvasHint">Click <b>Capture frame</b> to begin.</div>
+      </div>
+
+      <div class="canvas-tools">
+        <span class="tools-label">Click sets:</span>
+        <label><input type="radio" name="mode" value="start" checked> Start point (pick)</label>
+        <label><input type="radio" name="mode" value="end"> End point (place)</label>
+        <span class="spacer"></span>
+        <button id="btnClearPoints" class="ghost">Clear points</button>
+      </div>
+
+      <div id="pointInfo" class="info-line"></div>
+      <p class="legend">
+        <span class="dot red"></span>start / pick&nbsp;
+        <span class="dot blue"></span>end / place&nbsp;
+        <span class="dot yellow"></span>pick&#8594;place direction
+      </p>
+
+      <button id="btnExecute" class="execute-btn" disabled>&#9889; Execute</button>
+    </section>
+
+    <!-- ============ RIGHT: EPISODE LOG + FINISH + HELP ============ -->
+    <section class="col-panel">
+      <h2 class="section-title">Current episode</h2>
+      <div id="episodeIdLine" class="info-line">No active episode.</div>
+      <ol id="stepLog" class="step-log"></ol>
+
+      <div class="field">
+        <label class="field-label-sub">Notes <span class="opt">optional</span></label>
+        <textarea id="notes" rows="2" placeholder="Cloth type, anything worth recording…"></textarea>
+      </div>
+
+      <button id="btnFinish" class="save-btn" disabled>&#10003; Finish episode</button>
+
+      <div class="help-divider"></div>
+      <h3 class="help-subtitle">How to use</h3>
+      <ol class="steps">
+        <li><b>Put the cloth in frame</b>, then click <em>Capture frame</em>. This starts a new episode
+          if none is active.</li>
+        <li>Click the <b>start point</b> (where the robot should grab) on the image, then the
+          <b>end point</b> (where it should place it). The click mode advances automatically.</li>
+        <li>Click <b>Execute</b>. The robot runs the pick-and-place motion; the point pair is saved
+          together with the image you clicked on.</li>
+        <li>The robot returns home. Click <b>Capture frame</b> again to see the cloth's new position,
+          and repeat as many times as you like.</li>
+        <li>When done, click <b>Finish episode</b>. One more frame is captured as the final image and
+          the whole episode (every step + final image) is written to the dataset.</li>
+      </ol>
+    </section>
+
+  </div><!-- /columns -->
+
+  <div id="toast" class="toast" hidden></div>
+</div><!-- /app -->
+
+<script src="{{ url_for('static', filename='app.js') }}?v={{ version }}"></script>
+</body>
+</html>

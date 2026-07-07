@@ -1,0 +1,11 @@
+# Web-app dependencies (install with: pip install -r requirements.txt)
+# NOTE: rospy, cv_bridge and robotblockset are NOT listed here -- they come
+# from the ROS Noetic / conda "franka" environment already set up on the
+# robot-control PC (see README.md), and are only imported lazily by robot.py
+# when capture.source=ros_topic or robot.enabled=true.
+Flask>=3.0
+PyYAML>=6.0
+numpy>=1.24
+opencv-python>=4.8
+huggingface_hub>=0.23
+python-dotenv>=1.0
