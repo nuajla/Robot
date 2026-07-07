@@ -13,7 +13,7 @@ g = PandaGripper(namespace=ns,robot=r)
 
 r.ErrorRecovery()
 #r.Start()
-'''# Vrni v home
+# Vrni v home
 r.JMove(r.q_home, t=3)
 g.Open()
 time.sleep(1.0)
@@ -35,6 +35,6 @@ g.Move(.02)
 
 
 r.JMove(r.q_home, t=3)
-time.sleep(1.0) '''
+time.sleep(1.0) 
 g.Homing()
 g.Open()
