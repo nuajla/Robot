@@ -52,18 +52,16 @@
       </div>
 
       <div class="coord-tools">
-        <span class="tools-label">Or type exact pixel coordinates:</span>
+        <span class="tools-label">Or enter exact pixel coordinates:</span>
         <div class="coord-row">
           <span class="dot red"></span>
           <label>Start X <input type="number" id="startX" step="1" disabled></label>
           <label>Y <input type="number" id="startY" step="1" disabled></label>
-          <button id="btnSetStart" class="ghost" disabled>Set start</button>
         </div>
         <div class="coord-row">
           <span class="dot blue"></span>
           <label>End X <input type="number" id="endX" step="1" disabled></label>
           <label>Y <input type="number" id="endY" step="1" disabled></label>
-          <button id="btnSetEnd" class="ghost" disabled>Set end</button>
         </div>
       </div>
 
@@ -97,7 +95,8 @@
           if none is active.</li>
         <li>Click the <b>start point</b> (where the robot should grab) on the image, then the
           <b>end point</b> (where it should place it). The click mode advances automatically.
-          Alternatively, type exact pixel coordinates and click <em>Set start</em> / <em>Set end</em>.</li>
+          Alternatively, type the exact pixel coordinates into the Start/End X/Y fields &mdash;
+          <b>Execute</b> enables as soon as both points are set.</li>
         <li>Click <b>Execute</b>. The robot runs the pick-and-place motion; the point pair is saved
           together with the image you clicked on.</li>
         <li>The robot returns home. Click <b>Capture frame</b> again to see the cloth's new position,

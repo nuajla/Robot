@@ -89,17 +89,23 @@ function loadBase(url, cb) {
   img.src = url;
 }
 
-function updatePointInfo() {
+function refreshPointInfo() {
   const parts = [];
   if (startPoint) parts.push(`start (${startPoint[0]}, ${startPoint[1]})`);
   if (endPoint) parts.push(`end (${endPoint[0]}, ${endPoint[1]})`);
   $("pointInfo").textContent = parts.join("  ·  ");
   $("btnExecute").disabled = !(startPoint && endPoint);
+}
+
+function updatePointInfo() {
+  refreshPointInfo();
   syncCoordFields();
 }
 
 // ---------------------------------------------------------------------------
-// Exact-coordinate entry (alternative to clicking on the canvas)
+// Exact-coordinate entry (alternative to clicking on the canvas) -- the
+// Start/End X/Y fields and startPoint/endPoint are kept in sync both ways,
+// so typing a coordinate is equivalent to clicking it on the canvas.
 // ---------------------------------------------------------------------------
 function clampToFrame(x, y) {
   return [
@@ -116,22 +122,36 @@ function syncCoordFields() {
 }
 
 function setCoordControlsEnabled(enabled) {
-  ["startX", "startY", "endX", "endY", "btnSetStart", "btnSetEnd"].forEach((id) => {
-    $(id).disabled = !enabled;
-  });
+  ["startX", "startY", "endX", "endY"].forEach((id) => { $(id).disabled = !enabled; });
   if (enabled) {
     ["startX", "endX"].forEach((id) => { $(id).min = 0; $(id).max = frameW; });
     ["startY", "endY"].forEach((id) => { $(id).min = 0; $(id).max = frameH; });
   }
 }
 
-function readCoordInputs(xId, yId) {
-  const x = Number($(xId).value), y = Number($(yId).value);
-  if ($(xId).value === "" || $(yId).value === "" || !Number.isFinite(x) || !Number.isFinite(y)) {
-    toast("Enter numeric X and Y coordinates first.", "err");
-    return null;
-  }
+function pointFromInputs(xId, yId) {
+  const xStr = $(xId).value, yStr = $(yId).value;
+  if (xStr === "" || yStr === "") return null;
+  const x = Number(xStr), y = Number(yStr);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
   return clampToFrame(x, y);
+}
+
+// Fires on every keystroke: updates the live point + Execute availability,
+// but must not rewrite the field's own value mid-edit (would move the cursor).
+function handleCoordInput() {
+  if (!baseImage) return;
+  startPoint = pointFromInputs("startX", "startY");
+  endPoint = pointFromInputs("endX", "endY");
+  redraw();
+  refreshPointInfo();
+}
+
+// Fires once editing settles (blur / Enter): normalize the field to the
+// clamped/rounded value actually used, and mirror it into the other side.
+function handleCoordChange() {
+  if (!baseImage) return;
+  updatePointInfo();
 }
 
 // ---------------------------------------------------------------------------
@@ -276,23 +296,9 @@ $("btnClearPoints").addEventListener("click", () => {
   updatePointInfo();
 });
 
-$("btnSetStart").addEventListener("click", () => {
-  if (!baseImage) { toast("Capture a frame first.", "err"); return; }
-  const p = readCoordInputs("startX", "startY");
-  if (!p) return;
-  startPoint = p;
-  setClickMode("end");
-  redraw();
-  updatePointInfo();
-});
-
-$("btnSetEnd").addEventListener("click", () => {
-  if (!baseImage) { toast("Capture a frame first.", "err"); return; }
-  const p = readCoordInputs("endX", "endY");
-  if (!p) return;
-  endPoint = p;
-  redraw();
-  updatePointInfo();
+["startX", "startY", "endX", "endY"].forEach((id) => {
+  $(id).addEventListener("input", handleCoordInput);
+  $(id).addEventListener("change", handleCoordChange);
 });
 
 // ---------------------------------------------------------------------------
