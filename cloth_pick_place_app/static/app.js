@@ -95,6 +95,43 @@ function updatePointInfo() {
   if (endPoint) parts.push(`end (${endPoint[0]}, ${endPoint[1]})`);
   $("pointInfo").textContent = parts.join("  ·  ");
   $("btnExecute").disabled = !(startPoint && endPoint);
+  syncCoordFields();
+}
+
+// ---------------------------------------------------------------------------
+// Exact-coordinate entry (alternative to clicking on the canvas)
+// ---------------------------------------------------------------------------
+function clampToFrame(x, y) {
+  return [
+    Math.round(Math.max(0, Math.min(frameW, x))),
+    Math.round(Math.max(0, Math.min(frameH, y))),
+  ];
+}
+
+function syncCoordFields() {
+  $("startX").value = startPoint ? startPoint[0] : "";
+  $("startY").value = startPoint ? startPoint[1] : "";
+  $("endX").value = endPoint ? endPoint[0] : "";
+  $("endY").value = endPoint ? endPoint[1] : "";
+}
+
+function setCoordControlsEnabled(enabled) {
+  ["startX", "startY", "endX", "endY", "btnSetStart", "btnSetEnd"].forEach((id) => {
+    $(id).disabled = !enabled;
+  });
+  if (enabled) {
+    ["startX", "endX"].forEach((id) => { $(id).min = 0; $(id).max = frameW; });
+    ["startY", "endY"].forEach((id) => { $(id).min = 0; $(id).max = frameH; });
+  }
+}
+
+function readCoordInputs(xId, yId) {
+  const x = Number($(xId).value), y = Number($(yId).value);
+  if ($(xId).value === "" || $(yId).value === "" || !Number.isFinite(x) || !Number.isFinite(y)) {
+    toast("Enter numeric X and Y coordinates first.", "err");
+    return null;
+  }
+  return clampToFrame(x, y);
 }
 
 // ---------------------------------------------------------------------------
@@ -139,6 +176,7 @@ async function doCapture() {
     episodeId = r.episode_id; stepIndex = r.step_index;
     startPoint = null; endPoint = null;
     setClickMode("start");
+    setCoordControlsEnabled(true);
     updatePointInfo();
     updateEpisodeStatus();
     loadBase(r.image, () => { $("canvasHint").hidden = true; });
@@ -171,6 +209,7 @@ async function doExecute() {
     $("canvasHint").textContent = "Capture frame to see the cloth's new position.";
     $("canvasHint").hidden = false;
     setClickMode("start");
+    setCoordControlsEnabled(false);
     updatePointInfo();
     updateEpisodeStatus();
   } catch (e) {
@@ -197,6 +236,7 @@ async function doFinish() {
     $("stepLog").innerHTML = "";
     $("notes").value = "";
     setClickMode("start");
+    setCoordControlsEnabled(false);
     updatePointInfo();
     updateEpisodeStatus();
   } catch (e) {
@@ -232,6 +272,25 @@ $("btnFinish").addEventListener("click", doFinish);
 $("btnClearPoints").addEventListener("click", () => {
   startPoint = null; endPoint = null;
   setClickMode("start");
+  redraw();
+  updatePointInfo();
+});
+
+$("btnSetStart").addEventListener("click", () => {
+  if (!baseImage) { toast("Capture a frame first.", "err"); return; }
+  const p = readCoordInputs("startX", "startY");
+  if (!p) return;
+  startPoint = p;
+  setClickMode("end");
+  redraw();
+  updatePointInfo();
+});
+
+$("btnSetEnd").addEventListener("click", () => {
+  if (!baseImage) { toast("Capture a frame first.", "err"); return; }
+  const p = readCoordInputs("endX", "endY");
+  if (!p) return;
+  endPoint = p;
   redraw();
   updatePointInfo();
 });
